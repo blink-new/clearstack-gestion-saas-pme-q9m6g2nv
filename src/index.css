@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables marque ClearStack */
+:root{
+  --clr-primary: #0063FF;   /* Primary Blue */
+  --clr-primary-light:#AEDCFF;
+  --clr-primary-dark:#001A4C;
+  --clr-teal:#00D1B2;
+  --clr-salmon:#FF6F6C;
+  --clr-gold:#FFB800;
+}
+
+/* Base */
+@layer base{
+  html,body,#root{ height:100%; }
+  body{ @apply bg-gray-50 text-slate-900 antialiased; }
+  .dark body{ @apply bg-slate-900 text-slate-100; }
+}
+
+/* Utilitaires marque */
+@layer utilities{
+  .bg-brand        { background-color: var(--clr-primary); }
+  .text-brand      { color: var(--clr-primary); }
+  .bg-brand-light  { background-color: var(--clr-primary-light); }
+  .bg-brand-dark   { background-color: var(--clr-primary-dark); }
+}

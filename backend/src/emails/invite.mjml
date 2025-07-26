@@ -1,0 +1,158 @@
+<!-- path: backend/src/emails/invite.mjml -->
+<mjml>
+  <mj-head>
+    <mj-title>{{inviterName}} t'invite à rejoindre ClearStack</mj-title>
+    <mj-preview>Optimise tes logiciels et économise sur tes abonnements avec ClearStack</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, Arial, sans-serif" />
+      <mj-text font-size="16px" color="#374151" line-height="1.6" />
+      <mj-button background-color="#0063FF" color="white" font-size="16px" font-weight="600" border-radius="8px" />
+    </mj-attributes>
+    <mj-style inline="inline">
+      .primary-color { color: #0063FF !important; }
+      .secondary-color { color: #00D1B2 !important; }
+      .text-neutral { color: #6B7280 !important; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#F7F8FA">
+    <!-- Header -->
+    <mj-section background-color="white" padding="40px 20px 20px">
+      <mj-column>
+        <mj-image src="https://app.clearstack.fr/brand/clearstack-logo.svg" alt="ClearStack" width="160" align="center" />
+        <mj-text align="center" font-size="14px" color="#6B7280" padding-top="10px">
+          Optimisation logiciels pour PME
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Main Content -->
+    <mj-section background-color="white" padding="20px">
+      <mj-column>
+        <mj-text font-size="20px" font-weight="600" color="#111827" align="center" padding-bottom="20px">
+          {{inviterName}} t'invite à rejoindre ClearStack
+        </mj-text>
+        
+        <mj-text font-size="16px" color="#374151" padding-bottom="15px">
+          Salut,
+        </mj-text>
+        
+        <mj-text font-size="16px" color="#374151" padding-bottom="15px">
+          <strong>{{inviterName}}</strong> ({{inviterEmail}}) t'invite à découvrir <strong>ClearStack</strong>, l'outil gratuit qui aide les PME françaises à :
+        </mj-text>
+
+        <mj-text font-size="16px" color="#374151" padding-bottom="5px">
+          ✅ <strong>Recenser tous leurs logiciels</strong> (coûts, versions, utilisateurs)
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding-bottom="5px">
+          ✅ <strong>Collecter des avis internes</strong> pour mieux choisir
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding-bottom="5px">
+          ✅ <strong>Suivre les échéances</strong> et négocier au bon moment
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding-bottom="20px">
+          ✅ <strong>Identifier des économies</strong> (licences inutilisées, redondances...)
+        </mj-text>
+
+        {{#if message}}
+        <mj-section background-color="#F3F4F6" border-radius="8px" padding="15px">
+          <mj-column>
+            <mj-text font-size="14px" color="#6B7280" font-style="italic">
+              Message de {{inviterName}} :
+            </mj-text>
+            <mj-text font-size="16px" color="#374151" padding-top="10px">
+              "{{message}}"
+            </mj-text>
+          </mj-column>
+        </mj-section>
+        {{/if}}
+
+        <mj-button href="{{referralLink}}" padding="30px 0">
+          Créer mon accès gratuit
+        </mj-button>
+
+        <mj-text font-size="14px" color="#6B7280" align="center" padding-top="20px">
+          ClearStack est 100% gratuit pour les PME françaises.<br>
+          Aucune carte bancaire requise.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Benefits Section -->
+    <mj-section background-color="#F8FAFF" padding="30px 20px">
+      <mj-column>
+        <mj-text font-size="18px" font-weight="600" color="#111827" align="center" padding-bottom="20px">
+          Pourquoi les PME choisissent ClearStack ?
+        </mj-text>
+        
+        <mj-table>
+          <tr>
+            <td style="padding: 10px; vertical-align: top; width: 50%;">
+              <div style="background: white; padding: 20px; border-radius: 8px; height: 100%;">
+                <div style="color: #0063FF; font-size: 24px; margin-bottom: 10px;">💰</div>
+                <div style="font-weight: 600; color: #111827; margin-bottom: 8px;">Économies moyennes</div>
+                <div style="color: #6B7280; font-size: 14px;">15-30% sur les coûts logiciels grâce à l'optimisation</div>
+              </div>
+            </td>
+            <td style="padding: 10px; vertical-align: top; width: 50%;">
+              <div style="background: white; padding: 20px; border-radius: 8px; height: 100%;">
+                <div style="color: #00D1B2; font-size: 24px; margin-bottom: 10px;">⏱️</div>
+                <div style="font-weight: 600; color: #111827; margin-bottom: 8px;">Gain de temps</div>
+                <div style="color: #6B7280; font-size: 14px;">Plus de suivi manuel des contrats et échéances</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; vertical-align: top; width: 50%;">
+              <div style="background: white; padding: 20px; border-radius: 8px; height: 100%;">
+                <div style="color: #F59E42; font-size: 24px; margin-bottom: 10px;">🎯</div>
+                <div style="font-weight: 600; color: #111827; margin-bottom: 8px;">Décisions éclairées</div>
+                <div style="color: #6B7280; font-size: 14px;">Avis internes pour choisir les bons outils</div>
+              </div>
+            </td>
+            <td style="padding: 10px; vertical-align: top; width: 50%;">
+              <div style="background: white; padding: 20px; border-radius: 8px; height: 100%;">
+                <div style="color: #2ECC71; font-size: 24px; margin-bottom: 10px;">🚀</div>
+                <div style="font-weight: 600; color: #111827; margin-bottom: 8px;">Setup rapide</div>
+                <div style="color: #6B7280; font-size: 14px;">Opérationnel en moins de 10 minutes</div>
+              </div>
+            </td>
+          </tr>
+        </mj-table>
+      </mj-column>
+    </mj-section>
+
+    <!-- CTA Section -->
+    <mj-section background-color="white" padding="40px 20px">
+      <mj-column>
+        <mj-text font-size="18px" font-weight="600" color="#111827" align="center" padding-bottom="15px">
+          Prêt à optimiser tes logiciels ?
+        </mj-text>
+        
+        <mj-button href="{{referralLink}}" background-color="#00D1B2" padding="20px 0">
+          Rejoindre {{companyName}} sur ClearStack
+        </mj-button>
+        
+        <mj-text font-size="14px" color="#6B7280" align="center" padding-top="20px">
+          Inscription gratuite • Aucun engagement • Support en français
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#F7F8FA" padding="30px 20px">
+      <mj-column>
+        <mj-text font-size="12px" color="#9CA3AF" align="center" padding-bottom="10px">
+          ClearStack - Optimisation logiciels pour PME françaises
+        </mj-text>
+        <mj-text font-size="12px" color="#9CA3AF" align="center" padding-bottom="10px">
+          Cette invitation a été envoyée par {{inviterName}} ({{inviterEmail}})
+        </mj-text>
+        <mj-text font-size="12px" color="#9CA3AF" align="center">
+          <a href="#" style="color: #9CA3AF; text-decoration: underline;">Se désabonner</a> • 
+          <a href="https://clearstack.fr/confidentialite" style="color: #9CA3AF; text-decoration: underline;">Confidentialité</a> • 
+          <a href="https://clearstack.fr/cgu" style="color: #9CA3AF; text-decoration: underline;">CGU</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

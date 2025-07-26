@@ -1,0 +1,131 @@
+/* ClearStack Theme Variables */
+
+:root {
+  /* ClearStack Design System - Light Mode (HSL format) */
+  --color-primary-600: 216 100% 50%;   /* #0063FF */
+  --color-primary-100: 216 100% 84%;   /* #AEDCFF */
+  --color-primary-900: 216 100% 15%;   /* #001A4C */
+  --color-neutral-100: 220 14% 96%;    /* #F7F8FA */
+  --color-neutral-200: 239 76% 63%;    /* #5557EB */
+  --color-neutral-300: 220 13% 91%;    /* #D1D5DB */
+  --color-neutral-600: 220 9% 46%;     /* #6B7280 */
+  --color-neutral-700: 220 13% 18%;    /* #374151 */
+  --color-neutral-900: 220 26% 14%;    /* #111827 */
+  --color-neutral-950: 216 95% 12%;    /* #031A3F */
+  --color-teal-500: 171 100% 41%;      /* #00D1B2 */
+  --color-salmon-500: 2 100% 71%;      /* #FF6F6C */
+  --color-gold-500: 46 100% 50%;       /* #FFB800 */
+  --color-success-500: 145 63% 49%;    /* #2ECC71 */
+  --color-warning-500: 35 91% 55%;     /* #F5A623 */
+  --color-danger-500: 359 100% 64%;    /* #FF4D4F */
+  
+  /* ShadCN Variables - Light Mode */
+  --background: 220 14% 96%;
+  --foreground: 216 95% 12%;
+  --card: 0 0% 100%;
+  --card-foreground: 216 95% 12%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 216 95% 12%;
+  --primary: 216 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 220 14% 96%;
+  --secondary-foreground: 216 95% 12%;
+  --muted: 220 14% 96%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 220 14% 96%;
+  --accent-foreground: 216 95% 12%;
+  --destructive: 359 100% 64%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 216 100% 50%;
+  
+  /* Chart colors */
+  --chart-1: 216 100% 50%;
+  --chart-2: 171 100% 41%;
+  --chart-3: 46 100% 50%;
+  --chart-4: 2 100% 71%;
+  --chart-5: 239 76% 63%;
+  
+  /* Sidebar colors */
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 216 95% 12%;
+  --sidebar-primary: 216 100% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 220 14% 96%;
+  --sidebar-accent-foreground: 216 95% 12%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 216 100% 50%;
+}
+
+[data-theme='dark'] {
+  /* ClearStack Design System - Dark Mode (HSL format) */
+  --color-primary-600: 216 100% 75%;   /* #5AA8FF */
+  --color-primary-100: 216 100% 25%;   /* #084C92 */
+  --color-primary-900: 220 14% 96%;    /* #E5E9F2 */
+  --color-neutral-100: 220 26% 8%;     /* #0F141C */
+  --color-neutral-200: 215 28% 17%;    /* #1E293B */
+  --color-neutral-300: 215 20% 27%;    /* #334155 */
+  --color-neutral-600: 214 32% 91%;    /* #94A3B8 */
+  --color-neutral-700: 214 32% 91%;    /* #CBD5E1 */
+  --color-neutral-900: 220 14% 96%;    /* #F1F5F9 */
+  --color-neutral-950: 0 0% 100%;      /* #FFFFFF */
+  --color-teal-500: 171 100% 41%;      /* #00D1B2 */
+  --color-salmon-500: 2 100% 71%;      /* #FF6F6C */
+  --color-gold-500: 46 100% 50%;       /* #FFB800 */
+  --color-success-500: 145 63% 49%;    /* #2ECC71 */
+  --color-warning-500: 35 91% 55%;     /* #F5A623 */
+  --color-danger-500: 359 100% 64%;    /* #FF4D4F */
+  
+  /* ShadCN Variables - Dark Mode */
+  --background: 220 26% 8%;
+  --foreground: 0 0% 100%;
+  --card: 215 28% 17%;
+  --card-foreground: 0 0% 100%;
+  --popover: 215 28% 17%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 216 100% 75%;
+  --primary-foreground: 220 26% 8%;
+  --secondary: 215 20% 27%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 215 20% 27%;
+  --muted-foreground: 214 32% 91%;
+  --accent: 215 20% 27%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 359 100% 64%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 215 20% 27%;
+  --input: 215 20% 27%;
+  --ring: 216 100% 75%;
+  
+  /* Chart colors - Dark Mode */
+  --chart-1: 216 100% 75%;
+  --chart-2: 171 100% 41%;
+  --chart-3: 46 100% 50%;
+  --chart-4: 2 100% 71%;
+  --chart-5: 239 76% 63%;
+  
+  /* Sidebar colors - Dark Mode */
+  --sidebar-background: 220 26% 8%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-primary: 216 100% 75%;
+  --sidebar-primary-foreground: 220 26% 8%;
+  --sidebar-accent: 215 20% 27%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: 215 20% 27%;
+  --sidebar-ring: 216 100% 75%;
+}
+
+/* Prevent flash of unstyled theme */
+html {
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}

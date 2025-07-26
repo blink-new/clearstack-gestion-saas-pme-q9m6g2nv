@@ -1,0 +1,78 @@
+<mjml>
+  <mj-head>
+    <mj-title>Nouvelle Demande - ClearStack</mj-title>
+    <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <mj-attributes>
+      <mj-all font-family="Inter, Arial, sans-serif" />
+      <mj-text font-size="16px" color="#031A3F" line-height="1.5" />
+      <mj-button background-color="#0063FF" color="white" font-weight="600" border-radius="8px" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#F7F8FA">
+    <!-- Header -->
+    <mj-section background-color="#FFFFFF" padding="24px">
+      <mj-column>
+        <mj-image src="{{logoUrl}}" alt="ClearStack" width="120px" align="left" />
+      </mj-column>
+    </mj-section>
+
+    <!-- Contenu principal -->
+    <mj-section background-color="#FFFFFF" padding="32px 24px">
+      <mj-column>
+        <mj-text font-size="24px" font-weight="700" color="#031A3F" padding-bottom="16px">
+          🗳️ Nouvelle demande de logiciel
+        </mj-text>
+        
+        <mj-text padding-bottom="24px">
+          Bonjour {{userName}},
+        </mj-text>
+        
+        <mj-text padding-bottom="16px">
+          <strong>{{requesterName}}</strong> a proposé un nouveau logiciel : <strong>{{softwareName}}</strong>
+        </mj-text>
+        
+        {{#if description}}
+        <mj-text padding-bottom="24px" color="#6B7280" font-style="italic">
+          "{{description}}"
+        </mj-text>
+        {{/if}}
+        
+        <mj-text padding-bottom="32px">
+          Votre avis compte ! Votez pour cette demande si elle vous semble pertinente pour l'équipe.
+        </mj-text>
+        
+        <mj-button href="{{baseUrl}}/requests/{{requestId}}" padding-bottom="24px">
+          Voter pour cette demande
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+    <!-- Encouragement PLG -->
+    <mj-section background-color="#00D1B2" padding="24px">
+      <mj-column>
+        <mj-text font-size="18px" font-weight="600" color="white" padding-bottom="16px" align="center">
+          💡 Vous aussi, proposez vos idées !
+        </mj-text>
+        
+        <mj-text font-size="14px" color="white" align="center" padding-bottom="16px">
+          Avez-vous un logiciel à suggérer à votre équipe ?
+        </mj-text>
+        
+        <mj-button background-color="white" color="#00D1B2" href="{{baseUrl}}/requests/new">
+          Faire une demande
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#F7F8FA" padding="24px">
+      <mj-column>
+        <mj-text font-size="12px" color="#6B7280" align="center">
+          Vous recevez cet email car vous avez activé les notifications de demandes.
+          <br />
+          <a href="{{baseUrl}}/notifications/settings" style="color: #0063FF;">Gérer mes préférences</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

@@ -1,0 +1,520 @@
+// path: backend/prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum BillingPeriod {
+  MONTH
+  YEAR
+}
+
+enum UsageStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum RequestStatus {
+  DRAFT
+  SUBMITTED
+  REVIEW
+  ACCEPTED
+  REFUSED
+}
+
+enum Urgency {
+  IMMEDIATE
+  LT_3M
+  GT_3M
+}
+
+enum ProjectStatus {
+  STEP1
+  STEP2
+  STEP3
+  STEP4
+  DONE
+}
+
+enum NotificationType {
+  ALERT_CONTRACT
+  REQUEST
+  PROJECT_TASK
+  SYSTEM
+}
+
+enum EconomyType {
+  INACTIVE_LICENSE
+  REDUNDANCY
+  LOW_SATISFACTION
+  RENEWAL
+}
+
+model Company {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users                     User[]
+  entities                  Entity[]
+  alertSettings             AlertSetting[]
+  importBatches             ImportBatch[]
+  economyItems              EconomyItem[]
+  reviews                   Review[]
+  requests                  Request[]
+  votes                     Vote[]
+  purchaseProjects          PurchaseProject[]
+  tasks                     Task[]
+  notifications             Notification[]
+  integrationSettings       CompanyIntegrationSetting?
+  outboundEvents            OutboundEvent[]
+  featureFlags              FeatureFlag[]
+  betaFeedbacks             BetaFeedback[]
+}
+
+model Entity {
+  id        String   @id @default(uuid())
+  companyId String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  company     Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  departments Department[]
+  users       User[]
+  contracts   Contract[]
+
+  @@index([companyId])
+}
+
+model Department {
+  id       String @id @default(uuid())
+  entityId String
+  name     String
+
+  entity Entity @relation(fields: [entityId], references: [id], onDelete: Cascade)
+
+  @@index([entityId])
+}
+
+model User {
+  id         String    @id @default(uuid())
+  companyId  String
+  entityId   String?
+  email      String    @unique
+  firstName  String
+  lastName   String
+  role       UserRole  @default(USER)
+  linkedinId String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  company           Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  entity            Entity?            @relation(fields: [entityId], references: [id])
+  usage             Usage[]
+  reviews           Review[]
+  requests          Request[]
+  votes             Vote[]
+  assignedTasks     Task[]
+  notifications     Notification[]
+  userBadges        UserBadge[]
+  pushSubscriptions PushSubscription[]
+  betaFeedbacks     BetaFeedback[]
+
+  @@index([companyId])
+  @@index([entityId])
+}
+
+model Software {
+  id            String   @id @default(uuid())
+  externalRefId String?
+  name          String
+  version       String?
+  category      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  contracts    Contract[]
+  usage        Usage[]
+  reviews      Review[]
+  requests     Request[]
+  projects     PurchaseProject[]
+  economyItems EconomyItem[]
+}
+
+model Contract {
+  id            String        @id @default(uuid())
+  softwareId    String
+  entityId      String?
+  costAmount    Decimal
+  currency      String        @default("EUR")
+  billingPeriod BillingPeriod
+  endDate       DateTime
+  noticeDays    Int           @default(95)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  software            Software             @relation(fields: [softwareId], references: [id], onDelete: Cascade)
+  entity              Entity?              @relation(fields: [entityId], references: [id])
+  alertPerContract    AlertPerContract?
+
+  @@index([softwareId])
+  @@index([entityId])
+  @@index([endDate])
+}
+
+model Usage {
+  userId     String
+  softwareId String
+  status     UsageStatus @default(ACTIVE)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  software Software @relation(fields: [softwareId], references: [id], onDelete: Cascade)
+
+  @@id([userId, softwareId])
+  @@index([userId])
+  @@index([softwareId])
+}
+
+model Review {
+  id           String   @id @default(uuid())
+  userId       String
+  softwareId   String
+  companyId    String
+  rating       Int
+  strengths    String
+  weaknesses   String
+  improvement  String?
+  tags         Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  software Software @relation(fields: [softwareId], references: [id], onDelete: Cascade)
+  company  Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([softwareId])
+  @@index([companyId])
+}
+
+model Request {
+  id              String        @id @default(uuid())
+  requesterId     String
+  companyId       String
+  softwareRef     String?
+  softwareId      String?
+  descriptionNeed String
+  urgency         Urgency
+  estBudget       Decimal?
+  status          RequestStatus @default(DRAFT)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  requester User              @relation(fields: [requesterId], references: [id], onDelete: Cascade)
+  company   Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  software  Software?         @relation(fields: [softwareId], references: [id])
+  votes     Vote[]
+  projects  PurchaseProject[]
+
+  @@index([requesterId])
+  @@index([companyId])
+  @@index([softwareId])
+}
+
+model Vote {
+  requestId String
+  voterId   String
+  companyId String
+  createdAt DateTime @default(now())
+
+  request Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  voter   User    @relation(fields: [voterId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@id([requestId, voterId])
+  @@index([requestId])
+  @@index([voterId])
+  @@index([companyId])
+}
+
+model PurchaseProject {
+  id          String        @id @default(uuid())
+  requestId   String
+  companyId   String
+  softwareId  String?
+  status      ProjectStatus @default(STEP1)
+  roiEstimate String?
+  risks       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  request  Request   @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  company  Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  software Software? @relation(fields: [softwareId], references: [id])
+  tasks    Task[]
+
+  @@index([requestId])
+  @@index([companyId])
+  @@index([softwareId])
+}
+
+model Task {
+  id         String   @id @default(uuid())
+  projectId  String
+  companyId  String
+  title      String
+  assigneeId String?
+  dueDate    DateTime?
+  done       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  project  PurchaseProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  company  Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  assignee User?           @relation(fields: [assigneeId], references: [id])
+
+  @@index([projectId])
+  @@index([companyId])
+  @@index([assigneeId])
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  companyId String
+  type      NotificationType
+  payload   Json
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([companyId])
+}
+
+model Badge {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  label       String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userBadges UserBadge[]
+}
+
+model UserBadge {
+  userId   String
+  badgeId  String
+  earnedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@id([userId, badgeId])
+  @@index([userId])
+}
+
+model AlertSetting {
+  id               String @id @default(uuid())
+  companyId        String @unique
+  defaultNoticeDays Int    @default(95)
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model AlertPerContract {
+  contractId String   @id
+  noticeDays Int
+  milestones Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+}
+
+model ImportBatch {
+  id          String @id @default(uuid())
+  companyId   String
+  status      String @default("DRAFT")
+  rawFilePath String?
+  mapping     Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+}
+
+model EconomyRule {
+  id             String  @id @default(uuid())
+  code           String  @unique
+  percentDefault Decimal
+  active         Boolean @default(true)
+}
+
+model EconomyItem {
+  id              String      @id @default(uuid())
+  companyId       String
+  softwareId      String?
+  type            EconomyType
+  estimatedAmount Decimal
+  createdAt       DateTime    @default(now())
+
+  company  Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  software Software? @relation(fields: [softwareId], references: [id])
+
+  @@index([companyId])
+  @@index([softwareId])
+}
+
+model PushSubscription {
+  id        String   @id @default(uuid())
+  userId    String
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model CompanyIntegrationSetting {
+  id              String    @id @default(uuid())
+  companyId       String    @unique
+  prospectEnabled Boolean   @default(false)
+  anonymize       Boolean   @default(false)
+  lastSyncAt      DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+}
+
+model OutboundEvent {
+  id            String              @id @default(uuid())
+  companyId     String
+  type          OutboundEventType
+  payload       Json
+  status        OutboundEventStatus @default(PENDING)
+  tryCount      Int                 @default(0)
+  nextAttemptAt DateTime            @default(now())
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@index([status, nextAttemptAt])
+}
+
+enum OutboundEventType {
+  SOFTWARE_USAGE
+  REVIEW_CREATED
+  CONTRACT_RENEWAL
+  REQUEST_CREATED
+  REQUEST_ACCEPTED
+  ECONOMY_OPPORTUNITY
+}
+
+enum OutboundEventStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+model FeatureFlag {
+  id        String   @id @default(uuid())
+  key       String
+  enabled   Boolean  @default(false)
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([key, companyId])
+  @@index([key])
+  @@index([companyId])
+}
+
+model BetaFeedback {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  page      String
+  role      String
+  rating    Int?     // 1-5
+  message   String?
+  createdAt DateTime @default(now())
+
+  @@index([companyId])
+  @@index([userId])
+}
+
+model Referral {
+  id           String    @id @default(uuid())
+  companyId    String
+  inviterId    String
+  code         String    @unique
+  createdAt    DateTime  @default(now())
+  redeemedById String?   // user qui s'inscrit via ce code
+  redeemedAt   DateTime?
+  utmSource    String?
+  utmCampaign  String?
+  
+  @@index([companyId, inviterId])
+}
+
+model EmailOptOut {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  companyId  String
+  userId     String?
+  action     String   // ex: REVIEW_CREATED, REQUEST_ACCEPTED
+  entityType String   // ex: review, request, contract
+  entityId   String?
+  diff       Json?
+  ip         String?
+  ua         String?
+  createdAt  DateTime @default(now())
+
+  @@index([companyId, createdAt])
+}
+
+model DeletionQueue {
+  id          String   @id @default(uuid())
+  companyId   String?
+  userId      String?
+  reason      String   // USER_REQUEST / COMPANY_REQUEST
+  requestedAt DateTime @default(now())
+  purgeAfter  DateTime // now + 30j
+  status      String   // PENDING / PURGED / CANCELED
+}

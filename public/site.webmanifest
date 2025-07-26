@@ -1,0 +1,10 @@
+{
+  "name": "ClearStack",
+  "short_name": "ClearStack",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "64x64", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "theme_color": "#0063FF",
+  "background_color": "#FFFFFF",
+  "display": "standalone"
+}

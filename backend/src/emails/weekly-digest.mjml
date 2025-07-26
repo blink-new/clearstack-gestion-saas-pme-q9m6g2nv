@@ -1,0 +1,162 @@
+<mjml>
+  <mj-head>
+    <mj-title>Récap Hebdomadaire - ClearStack</mj-title>
+    <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <mj-attributes>
+      <mj-all font-family="Inter, Arial, sans-serif" />
+      <mj-text font-size="16px" color="#031A3F" line-height="1.5" />
+      <mj-button background-color="#0063FF" color="white" font-weight="600" border-radius="8px" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#F7F8FA">
+    <!-- Header -->
+    <mj-section background-color="#FFFFFF" padding="24px">
+      <mj-column>
+        <mj-image src="https://app.clearstack.fr/brand/clearstack-logo.svg" alt="ClearStack" width="160" align="left" />
+      </mj-column>
+    </mj-section>
+
+    <!-- Titre principal -->
+    <mj-section background-color="#FFFFFF" padding="32px 24px 16px">
+      <mj-column>
+        <mj-text font-size="28px" font-weight="700" color="#031A3F" align="center" padding-bottom="8px">
+          📊 Votre récap hebdomadaire
+        </mj-text>
+        
+        <mj-text font-size="16px" color="#6B7280" align="center" padding-bottom="24px">
+          Période : {{period}}
+        </mj-text>
+        
+        <mj-text padding-bottom="24px">
+          Bonjour {{userName}},
+        </mj-text>
+        
+        <mj-text padding-bottom="32px">
+          Voici un résumé de l'activité ClearStack de votre équipe cette semaine.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Statistiques -->
+    <mj-section background-color="#AEDCFF" padding="24px">
+      <mj-column>
+        <mj-text font-size="20px" font-weight="600" color="#031A3F" padding-bottom="16px" align="center">
+          📈 Activité de la semaine
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    
+    <mj-section background-color="#AEDCFF" padding="0 24px 24px">
+      <mj-column width="50%">
+        <mj-text font-size="32px" font-weight="700" color="#0063FF" align="center" padding-bottom="4px">
+          {{stats.newRequests}}
+        </mj-text>
+        <mj-text font-size="14px" color="#031A3F" align="center">
+          Nouvelles demandes
+        </mj-text>
+      </mj-column>
+      <mj-column width="50%">
+        <mj-text font-size="32px" font-weight="700" color="#2ECC71" align="center" padding-bottom="4px">
+          {{stats.completedTasks}}
+        </mj-text>
+        <mj-text font-size="14px" color="#031A3F" align="center">
+          Tâches terminées
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Économies suggérées -->
+    {{#if stats.totalSavings}}
+    <mj-section background-color="#FFFFFF" padding="24px">
+      <mj-column>
+        <mj-text font-size="20px" font-weight="600" color="#031A3F" padding-bottom="16px">
+          💰 Économies potentielles
+        </mj-text>
+        
+        <mj-text font-size="24px" font-weight="700" color="#2ECC71" padding-bottom="16px">
+          {{stats.totalSavings}}€ d'économies identifiées
+        </mj-text>
+        
+        <mj-button href="{{baseUrl}}/economies" background-color="#2ECC71">
+          Voir les détails
+        </mj-button>
+      </mj-column>
+    </mj-section>
+    {{/if}}
+
+    <!-- Contrats à renouveler -->
+    {{#if upcomingContracts}}
+    <mj-section background-color="#FFF3CD" padding="24px">
+      <mj-column>
+        <mj-text font-size="20px" font-weight="600" color="#856404" padding-bottom="16px">
+          ⚠️ Contrats à surveiller
+        </mj-text>
+        
+        <mj-text font-size="14px" color="#856404" padding-bottom="16px">
+          {{stats.contractsExpiring95}} contrats expirent dans les 95 prochains jours
+        </mj-text>
+        
+        {{#each upcomingContracts}}
+        <mj-text font-size="14px" color="#856404" padding-bottom="8px">
+          • <strong>{{softwareName}}</strong> - J-{{daysRemaining}} ({{amount}}€)
+        </mj-text>
+        {{/each}}
+        
+        <mj-button href="{{baseUrl}}/dashboard" background-color="#F5A623" color="white">
+          Voir tous les contrats
+        </mj-button>
+      </mj-column>
+    </mj-section>
+    {{/if}}
+
+    <!-- Top demandes -->
+    {{#if topRequests}}
+    <mj-section background-color="#FFFFFF" padding="24px">
+      <mj-column>
+        <mj-text font-size="20px" font-weight="600" color="#031A3F" padding-bottom="16px">
+          🔥 Demandes populaires
+        </mj-text>
+        
+        {{#each topRequests}}
+        <mj-text font-size="14px" color="#031A3F" padding-bottom="8px">
+          • <strong>{{title}}</strong> - {{votes}} votes (par {{requester}})
+        </mj-text>
+        {{/each}}
+        
+        <mj-button href="{{baseUrl}}/requests" padding-top="16px">
+          Voir toutes les demandes
+        </mj-button>
+      </mj-column>
+    </mj-section>
+    {{/if}}
+
+    <!-- CTA PLG -->
+    <mj-section background-color="#00D1B2" padding="24px">
+      <mj-column>
+        <mj-text font-size="18px" font-weight="600" color="white" padding-bottom="16px" align="center">
+          🚀 Invitez votre équipe !
+        </mj-text>
+        
+        <mj-text font-size="14px" color="white" align="center" padding-bottom="16px">
+          Plus votre équipe participe, plus ClearStack vous aide à optimiser vos logiciels.
+        </mj-text>
+        
+        <mj-button background-color="white" color="#00D1B2" href="{{baseUrl}}/invites">
+          Inviter des collègues
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#F7F8FA" padding="24px">
+      <mj-column>
+        <mj-text font-size="12px" color="#6B7280" align="center">
+          Vous recevez ce récap hebdomadaire tous les vendredis.
+          <br />
+          <a href="{{baseUrl}}/notifications/settings" style="color: #0063FF;">Gérer mes préférences</a> | 
+          <a href="{{baseUrl}}/dashboard" style="color: #0063FF;">Accéder à ClearStack</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
