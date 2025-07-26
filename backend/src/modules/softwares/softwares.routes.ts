@@ -13,6 +13,28 @@ r.post("/softwares", async (req,res,next)=>{
   }catch(e){ next(e); }
 });
 
+r.post("/softwares/create", async (req,res,next)=>{
+  try{
+    const { name, version, category, description, contract } = req.body||{};
+    if(!name) return res.status(400).json({code:"VALIDATION_ERROR",message:"name requis"});
+    const result = await prisma.$transaction(async(tx)=>{
+      const s = await tx.software.create({ data:{ name, version, category, description }});
+      if (contract?.cost_amount && contract?.billing_period){
+        await tx.contract.create({ data:{
+          software_id: s.id,
+          cost_amount: Number(contract.cost_amount),
+          billing_period: contract.billing_period, // MONTH | YEAR
+          currency: contract.currency || "EUR",
+          end_date: contract.end_date || null,
+          notice_days: contract.notice_days ?? 95
+        }});
+      }
+      return s;
+    });
+    res.status(201).json({ id: result.id });
+  }catch(e){ next(e); }
+});
+
 r.post("/softwares/:id/contracts", async (req,res,next)=>{
   try{
     const { id } = req.params;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiFetch, postAndGetId, findSoftwareIdByName, findSoftwareIdLoosely, Paginated, toast } from "../../../lib/api";
+import { apiFetch, Paginated, toast } from "../../../lib/api";
 
 type Software = {
   id: string; name: string; version?: string|null; category?: string|null;
@@ -80,41 +80,20 @@ export default function SoftwaresPage(){
             <h2 className="text-lg font-semibold mb-3">Ajouter un logiciel</h2>
             <form className="space-y-3" onSubmit={async (e)=>{e.preventDefault();
               const fd=new FormData(e.currentTarget as HTMLFormElement);
-              const payload = {
-                name:String(fd.get("name")||"").trim(),
-                version:String(fd.get("version")||"").trim() || undefined,
-                category:String(fd.get("category")||"").trim() || undefined,
-                description:String(fd.get("description")||"").trim() || undefined
+              const body = {
+                name: fd.get("name"), version: fd.get("version")||undefined,
+                category: fd.get("category")||undefined, description: fd.get("description")||undefined,
+                contract: (fd.get("cost_amount")? {
+                  cost_amount: fd.get("cost_amount"),
+                  billing_period: fd.get("billing_period")||"MONTH",
+                  end_date: fd.get("end_date")||null,
+                  notice_days: fd.get("notice_days")||95, currency:"EUR"
+                }: null)
               };
               try {
-                let softwareId: string;
-                try {
-                  softwareId = await postAndGetId("/softwares", payload);
-                } catch {
-                  const maybe = await findSoftwareIdByName(payload.name) || await findSoftwareIdLoosely(payload.name);
-                  if (!maybe) throw new Error("ID non renvoyé par l'API");
-                  softwareId = maybe;
-                }
-
-                const cost_raw = String(fd.get("cost_amount")||"").trim();
-                if (cost_raw) {
-                  const contractBody:any = {
-                    cost_amount: Number(cost_raw),
-                    billing_period: String(fd.get("billing_period")||"MONTH"),
-                    currency: "EUR",
-                  };
-                  const endDate = String(fd.get("end_date")||"").trim();
-                  const notice = String(fd.get("notice_days")||"").trim();
-                  if (endDate) contractBody.end_date = endDate;
-                  contractBody.notice_days = notice ? Number(notice) : 95;
-
-                  await apiFetch(`/softwares/${softwareId}/contracts`, { method:"POST", body: JSON.stringify(contractBody) });
-                  toast("Logiciel et contrat créés");
-                } else {
-                  toast("Logiciel créé. Ajoutez un contrat pour l'afficher dans le parc.");
-                }
-                setShowCreate(false);
-                qc.invalidateQueries({queryKey:["softwares"]});
+                const { id } = await apiFetch("/softwares/create", { method:"POST", body: JSON.stringify(body) });
+                toast(`Logiciel créé${body.contract?" avec contrat":""} (#${id})`);
+                setShowCreate(false); qc.invalidateQueries({queryKey:["softwares"]});
               } catch (err:any) {
                 console.error(err);
                 toast("Erreur lors de la création : " + (err?.message || "inconnue"));
